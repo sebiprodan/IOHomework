@@ -1,6 +1,11 @@
 package siit.homework;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class BiathlonAthlete implements Serializable {
 
@@ -29,6 +34,7 @@ public class BiathlonAthlete implements Serializable {
         return athleteNumber + "," + athleteName + "," + countryCode + "," + skiTimeResult +
                 "," + firstShootingRange + "," + secondShootingRange + "," + thirdShootingRange;
     }
+
 }
 
 
