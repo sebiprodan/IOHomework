@@ -1,10 +1,9 @@
 package siit.homework;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class BiathlonAthlete implements Serializable {
@@ -35,6 +34,23 @@ public class BiathlonAthlete implements Serializable {
                 "," + firstShootingRange + "," + secondShootingRange + "," + thirdShootingRange;
     }
 
+    public static void addAthleteInput() {
+        SkiBiathlon.allAthletes = new LinkedHashSet<>();
+
+        SkiBiathlon.allAthletes.add(new BiathlonAthlete(1, "Sebastian Prodan", "RO",
+                new SkiTimeResult(30, 24), "xxxox", "ooxxx", "xxxxx"));
+        SkiBiathlon.allAthletes.add(new BiathlonAthlete(2, "Bianca Prodan", "RO",
+                new SkiTimeResult(29, 30), "xxxxx", "xoxxx", "xxoxx"));
+
+
+        try (PrintStream out = new PrintStream(new File("DataSource" + File.separator + "SkiBiathlonResults"))) {
+            System.setOut(out);
+            for (BiathlonAthlete athletes : SkiBiathlon.allAthletes) {
+                System.out.println(athletes);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
-
-

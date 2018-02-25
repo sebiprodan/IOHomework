@@ -4,12 +4,8 @@ import org.junit.Test;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,22 +36,45 @@ public class SkiBiathlonTest {
 
     @Test
 
-    public void test_file_to_string_and_split() {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("DataSource" + File.separator + "SkiBiathlonResults"));
+    public void test_parse_CVS() {
 
-            String stringLine = bufferedReader.readLine();
+        String line;
+        String cvsSplitBy = ",";
 
-            while (stringLine != null) {
-                System.out.println(stringLine);
-                // read next line
-                stringLine = bufferedReader.readLine();
+        try (BufferedReader br = new BufferedReader(new FileReader("DataSource" + File.separator + "SkiBiathlonResults"));
+             PrintWriter out = new PrintWriter(new FileWriter("DataSource" + File.separator + "SkiBiathlonStandings"))){
+
+            while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] athlete = line.split(cvsSplitBy);
+
+                System.out.println("Athele: " + athlete[1] + " , result without penalties: " + athlete[3] + "]");
+                out.write("\n" +"Athele: " + athlete[1] + " , result without penalties: " + athlete[3] + "]");
+
             }
-            bufferedReader.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+
+    public void test_file_to_string_and_split() {
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("DataSource" + File.separator + "SkiBiathlonResults"));
+
+            List<String> lines = new LinkedList<>(); // create a new list
+            String line = in.readLine(); // read a line at a time
+            while (line != null) {
+                lines.add(line);// add the line to your list
+                line = in.readLine(); // try to read another line
+            }
+            System.out.println(lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
