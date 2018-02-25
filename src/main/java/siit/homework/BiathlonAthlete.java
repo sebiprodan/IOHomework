@@ -11,11 +11,12 @@ public class BiathlonAthlete implements Serializable {
     private String countryCode;
     private String skiTimeResult;
     private int skiTimeResultInSeconds;
-    private double finalSkiTimeResultInSeconds;
+    protected int finalSkiTimeResultInSeconds;
     private String firstShootingRange;
     private String secondShootingRange;
     private String thirdShootingRange;
     protected int penalties;
+    protected String finalReconvertedTime;
 
     public BiathlonAthlete(int athleteNumber, String athleteName, String countryCode, String skiTimeResult,
                            String firstShootingRange, String secondShootingRange, String thirdShootingRange) {
@@ -111,14 +112,14 @@ public class BiathlonAthlete implements Serializable {
 
     }
 
-    public Double standingCalculation() {
+    public Integer standingCalculation() {
 
         String[] timeUnits = skiTimeResult.split(":"); //will break the string up into an array
         int minutes = Integer.parseInt(timeUnits[0]); //first element
         int seconds = Integer.parseInt(timeUnits[1]); //second element
         skiTimeResultInSeconds = 60 * minutes + seconds;
 
-        String penaltiesUnits = firstShootingRange+secondShootingRange+thirdShootingRange; // will concatenate the strings
+        String penaltiesUnits = firstShootingRange + secondShootingRange + thirdShootingRange; // will concatenate the strings
         int counter = 0;
         for (int i = 0; i < penaltiesUnits.length(); i++) {
             if (penaltiesUnits.charAt(i) == 'o') {
@@ -126,8 +127,16 @@ public class BiathlonAthlete implements Serializable {
             }
         }
         penalties = counter * 10;
-        finalSkiTimeResultInSeconds = skiTimeResultInSeconds - penalties;
+        finalSkiTimeResultInSeconds = skiTimeResultInSeconds + penalties;
 
         return finalSkiTimeResultInSeconds;
+    }
+
+    public String reconvertedTime() {
+        int reconvertedTime = finalSkiTimeResultInSeconds;
+        int min = reconvertedTime / 60;
+        int sec = reconvertedTime - (min * 60);
+        finalReconvertedTime = String.format("%s:%s", min, sec);
+        return finalReconvertedTime;
     }
 }

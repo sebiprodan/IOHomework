@@ -5,11 +5,26 @@ import org.junit.Test;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SkiBiathlonTest {
+
+    @Test
+
+    public void test_parse_CVS_without_file() {
+
+        List<BiathlonAthlete> biathlonAthleteList = new ArrayList<>();
+        biathlonAthleteList.add(new BiathlonAthlete(1, "Sebastian Prodan", "RO",
+                "30:24", "xxxox", "ooxxx", "xxxxx"));
+        System.out.println(biathlonAthleteList);
+        String[] athleteArrayString = new String[biathlonAthleteList.size()];
+        
+    }
 
     @Test
 
@@ -26,7 +41,6 @@ public class SkiBiathlonTest {
             while ((line = br.readLine()) != null) {
                 // use comma as separator
                 String[] athlete = line.split(cvsSplitBy);
-//                System.out.println("Athele: " + athlete[1] + " , result without penalties: " + athlete[3] + "]");
                 out.write("\n" + "Athele: " + athlete[1] + " , result without penalties: " + athlete[3] + "]");
                 arrayListOfStrings.add(athlete[3]);
                 System.out.println(arrayListOfStrings);
@@ -87,7 +101,7 @@ public class SkiBiathlonTest {
 
     @Test
 
-    public void standing_calculation() {
+    public void time_converter() {
 
         String skiTimeResult = "30:40";
         String[] units = skiTimeResult.split(":"); //will break the string up into an array
@@ -98,6 +112,18 @@ public class SkiBiathlonTest {
         System.out.println(duration);
 
     }
+
+    @Test
+
+    public void time_converter_to_mmss() {
+        int pTime = 1770;
+        int min = pTime / 60;
+        int sec = pTime - (min * 60);
+        String reconvertedTime = String.format("%s:%s", min, sec);
+
+        System.out.println(reconvertedTime);
+    }
+
     @Test
 
     public void penaltyCalculation() {
@@ -117,7 +143,7 @@ public class SkiBiathlonTest {
 
     public void test_final_standing_calculation() {
 
-        String penaltiesUnits = "oooxx"+"xoxox"+"xxoxo"; // will concatenate the strings
+        String penaltiesUnits = "oooxx" + "xoxox" + "xxoxo"; // will concatenate the strings
         String skiTimeResult = "29:30";
         String[] timeUnits = skiTimeResult.split(":"); //will break the string up into an array
         int minutes = Integer.parseInt(timeUnits[0]); //first element
@@ -133,7 +159,8 @@ public class SkiBiathlonTest {
         int penalties = counter * 10;
         int finalSkiTimeResultInSeconds = skiTimeResultInSeconds - penalties;
 
-        System.out.println(finalSkiTimeResultInSeconds);;
+        System.out.println(finalSkiTimeResultInSeconds);
+        ;
     }
 
     @Test
