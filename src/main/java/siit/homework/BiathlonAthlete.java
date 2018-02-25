@@ -1,22 +1,23 @@
 package siit.homework;
 
 import java.io.*;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.TreeSet;
 
 public class BiathlonAthlete implements Serializable {
 
     private int athleteNumber;
     private String athleteName;
     private String countryCode;
-    protected SkiTimeResult skiTimeResult;
+    private String skiTimeResult;
+    private int skiTimeResultInSeconds;
+    private double finalSkiTimeResultInSeconds;
     private String firstShootingRange;
     private String secondShootingRange;
     private String thirdShootingRange;
+    protected int penalties;
 
-    public BiathlonAthlete(int athleteNumber, String athleteName, String countryCode, SkiTimeResult skiTimeResult,
+    public BiathlonAthlete(int athleteNumber, String athleteName, String countryCode, String skiTimeResult,
                            String firstShootingRange, String secondShootingRange, String thirdShootingRange) {
 
         this.athleteNumber = athleteNumber;
@@ -25,6 +26,62 @@ public class BiathlonAthlete implements Serializable {
         this.skiTimeResult = skiTimeResult;
         this.firstShootingRange = firstShootingRange;
         this.secondShootingRange = secondShootingRange;
+        this.thirdShootingRange = thirdShootingRange;
+    }
+
+    public int getAthleteNumber() {
+        return athleteNumber;
+    }
+
+    public void setAthleteNumber(int athleteNumber) {
+        this.athleteNumber = athleteNumber;
+    }
+
+    public String getAthleteName() {
+        return athleteName;
+    }
+
+    public void setAthleteName(String athleteName) {
+        this.athleteName = athleteName;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getSkiTimeResult() {
+        return skiTimeResult;
+    }
+
+    public void setSkiTimeResult(String skiTimeResult) {
+        this.skiTimeResult = skiTimeResult;
+    }
+
+    public String getFirstShootingRange() {
+        return firstShootingRange;
+    }
+
+    public void setFirstShootingRange(String firstShootingRange) {
+        this.firstShootingRange = firstShootingRange;
+    }
+
+    public String getSecondShootingRange() {
+        return secondShootingRange;
+    }
+
+    public void setSecondShootingRange(String secondShootingRange) {
+        this.secondShootingRange = secondShootingRange;
+    }
+
+    public String getThirdShootingRange() {
+        return thirdShootingRange;
+    }
+
+    public void setThirdShootingRange(String thirdShootingRange) {
         this.thirdShootingRange = thirdShootingRange;
     }
 
@@ -38,9 +95,9 @@ public class BiathlonAthlete implements Serializable {
         SkiBiathlon.allAthletes = new LinkedHashSet<>();
 
         SkiBiathlon.allAthletes.add(new BiathlonAthlete(1, "Sebastian Prodan", "RO",
-                new SkiTimeResult(30, 24), "xxxox", "ooxxx", "xxxxx"));
+                "31:43", "xxxox", "ooxxx", "xxxxx"));
         SkiBiathlon.allAthletes.add(new BiathlonAthlete(2, "Bianca Prodan", "RO",
-                new SkiTimeResult(29, 30), "xxxxx", "xoxxx", "xxoxx"));
+                "30:43", "xxxxx", "xoxxx", "xxoxx"));
 
 
         try (PrintStream out = new PrintStream(new File("DataSource" + File.separator + "SkiBiathlonResults"))) {
@@ -52,5 +109,25 @@ public class BiathlonAthlete implements Serializable {
             e.printStackTrace();
         }
 
+    }
+
+    public Double standingCalculation() {
+
+        String[] timeUnits = skiTimeResult.split(":"); //will break the string up into an array
+        int minutes = Integer.parseInt(timeUnits[0]); //first element
+        int seconds = Integer.parseInt(timeUnits[1]); //second element
+        skiTimeResultInSeconds = 60 * minutes + seconds;
+
+        String penaltiesUnits = firstShootingRange+secondShootingRange+thirdShootingRange; // will concatenate the strings
+        int counter = 0;
+        for (int i = 0; i < penaltiesUnits.length(); i++) {
+            if (penaltiesUnits.charAt(i) == 'o') {
+                counter++;
+            }
+        }
+        penalties = counter * 10;
+        finalSkiTimeResultInSeconds = skiTimeResultInSeconds - penalties;
+
+        return finalSkiTimeResultInSeconds;
     }
 }

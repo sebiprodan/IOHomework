@@ -2,19 +2,14 @@ package siit.homework;
 
 import java.util.Comparator;
 
-public class SkiTimeResultComparator implements Comparator {
+public class SkiTimeResultComparator implements Comparator <BiathlonAthlete>{
 
-    public int compare(Object o1, Object o2) {
+    @Override
+    public int compare(BiathlonAthlete e1, BiathlonAthlete e2) {
 
-        BiathlonAthlete ba1 = (BiathlonAthlete) o1;
-        BiathlonAthlete ba2 = (BiathlonAthlete) o2;
-
-        if (ba1.skiTimeResult == ba2.skiTimeResult)
-            return 0;
-      //  else if (ba1.skiTimeResult > ba2.skiTimeResult)
-        //    return 1;
-        else
-            return -1;
+        return e1.standingCalculation().compareTo(e2.standingCalculation());
     }
 }
+
+
 

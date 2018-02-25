@@ -3,68 +3,67 @@ package siit.homework;
 import java.io.*;
 import java.util.*;
 
+import static java.util.Collections.addAll;
+
 public class SkiBiathlon {
 
-    protected static List<String> arrayListOfStrings;
+    protected static List<BiathlonAthlete> biathlonAthleteList;
     protected static Set<BiathlonAthlete> allAthletes;
-    protected static String line;
 
     public static void main(String[] args) {
 
-        allAthletes = new LinkedHashSet<>();
-
-        allAthletes.add(new BiathlonAthlete(1, "Sebastian Prodan", "RO",
-                new SkiTimeResult(30, 24), "xxxox", "ooxxx", "xxxxx"));
-        allAthletes.add(new BiathlonAthlete(2, "Bianca Prodan", "RO",
-                new SkiTimeResult(29, 30), "xxxxx", "xoxxx", "xxoxx"));
-        allAthletes.add(new BiathlonAthlete(7, "Gabriela Szabo", "RO",
-                new SkiTimeResult(25, 30), "xooox", "xooox", "xooox"));
-
-        try (PrintStream out = new PrintStream(new File("DataSource" + File.separator + "SkiBiathlonResults"))) {
-            System.setOut(out);
-            for (BiathlonAthlete athlete : allAthletes) {
-                System.out.println(athlete);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        BufferedReader br = null;
         try {
-            BufferedReader in = new BufferedReader(new FileReader("DataSource" + File.separator + "SkiBiathlonResults"));
+            //Reading the csv file
+            br = new BufferedReader(new FileReader("DataSource" + File.separator + "SkiBiathlonResults"));
 
-            arrayListOfStrings = new LinkedList<>();
-            String line = in.readLine();
-            while (line != null) {
-                arrayListOfStrings.add(line);
-                line = in.readLine();
-            }
+            //Create List for holding Employee objects
+            biathlonAthleteList = new ArrayList<>();
 
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        String cvsSplitBy = ",";
-
-        try (BufferedReader br = new BufferedReader(new FileReader("DataSource" + File.separator + "SkiBiathlonResults"));
-             PrintWriter out = new PrintWriter(new FileWriter("DataSource" + File.separator + "SkiBiathlonStandings"))) {
-
+            String line;
             while ((line = br.readLine()) != null) {
+                String[] athleteDetail = line.split(",");
 
-                // use comma as separator
-                String[] athlete = line.split(cvsSplitBy);
-
-                System.out.println("Athele: " + athlete[1] + " , result without penalties: " + athlete[3] + "]");
-                out.write("Athele: " + athlete[1] + " , result without penalties: " + athlete[3] + "\n");
-
+                if (athleteDetail.length > 0) {
+                    //Save the employee details in Employee object
+                    BiathlonAthlete athlete = new BiathlonAthlete(Integer.parseInt(athleteDetail[0]),
+                            athleteDetail[1], athleteDetail[2], athleteDetail[3], athleteDetail[4], athleteDetail[5],
+                            athleteDetail[6]);
+                    biathlonAthleteList.add(athlete);
+                }
             }
+            Set<BiathlonAthlete> biathlonAthleteSet = new TreeSet<>(new SkiTimeResultComparator());
+            biathlonAthleteSet.addAll(biathlonAthleteList);
+//            for (BiathlonAthlete e : biathlonAthleteSet) {
+//                System.out.println(e);
+            try (PrintStream out = new PrintStream(new File("DataSource" + File.separator + "SkiBiathlonStandings"))) {
+                System.setOut(out);
+                for (BiathlonAthlete athletes : biathlonAthleteSet) {
+                    System.out.println(athletes.getAthleteName() + " " + athletes.getSkiTimeResult() + " " +"("+ athletes.penalties
+                            + ")");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//                System.out.println(e.getAthleteNumber() + "   " + e.getAthleteName() + "   "
+//                        + e.getCountryCode() + "   " + e.getSkiTimeResult() + "   "
+//                        + e.getFirstShootingRange() + "   " + e.getSecondShootingRange() + "   "
+//                        + e.getThirdShootingRange());
 
-        } catch (IOException e) {
-            e.printStackTrace();
+    } catch(
+    Exception ee)
+
+    {
+        ee.printStackTrace();
+    } finally
+
+    {
+        try {
+            br.close();
+        } catch (IOException ie) {
+            System.out.println("Error occurred while closing the BufferedReader");
+            ie.printStackTrace();
         }
     }
 }
-
+}
