@@ -93,23 +93,25 @@ public class BiathlonAthlete implements Serializable {
     }
 
     public static void addAthleteInput() {
-        SkiBiathlon.allAthletes = new LinkedHashSet<>();
 
-        SkiBiathlon.allAthletes.add(new BiathlonAthlete(1, "Sebastian Prodan", "RO",
-                "31:43", "xxxox", "ooxxx", "xxxxx"));
-        SkiBiathlon.allAthletes.add(new BiathlonAthlete(2, "Bianca Prodan", "RO",
-                "30:43", "xxxxx", "xoxxx", "xxoxx"));
-
+        Set<BiathlonAthlete> athletes = new LinkedHashSet<>();
+        athletes.add(new BiathlonAthlete(1, "Sebastian Prodan", "RO",
+                "30:24", "xxxox", "ooxxx", "xxxxx"));
+        athletes.add(new BiathlonAthlete(2, "Bianca Prodan", "RO",
+                "29:30", "xxxxx", "xxxxx", "xxxxx"));
+        athletes.add(new BiathlonAthlete(5, "Gabriela Szabo", "HU",
+                "29:30", "xxxxx", "xxxxx", "xxoxx"));
+        athletes.add(new BiathlonAthlete(7, "Alfonso de Temesvar", "HU",
+                "28:00", "ooooo", "ooooo", "xxoxx"));
 
         try (PrintStream out = new PrintStream(new File("DataSource" + File.separator + "SkiBiathlonResults"))) {
             System.setOut(out);
-            for (BiathlonAthlete athletes : SkiBiathlon.allAthletes) {
-                System.out.println(athletes);
+            for (BiathlonAthlete allAthletes : athletes) {
+                System.out.println(allAthletes);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public Integer standingCalculation() {

@@ -12,18 +12,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static junit.framework.TestCase.assertEquals;
+
 public class SkiBiathlonTest {
 
     @Test
 
     public void test_parse_CVS_without_file() {
 
-        List<BiathlonAthlete> biathlonAthleteList = new ArrayList<>();
-        biathlonAthleteList.add(new BiathlonAthlete(1, "Sebastian Prodan", "RO",
-                "30:24", "xxxox", "ooxxx", "xxxxx"));
-        System.out.println(biathlonAthleteList);
-        String[] athleteArrayString = new String[biathlonAthleteList.size()];
-        
+        String skiBiathlonResults = "1,Sebastian Prodan,RO,30:01,xxxox,oooxx,oxoxo";
+        String[] splitString = skiBiathlonResults.split(","); //will break the string up into an array
+        System.out.println(Arrays.toString(splitString));
+
     }
 
     @Test
@@ -63,7 +63,6 @@ public class SkiBiathlonTest {
             //Reading the csv file
             br = new BufferedReader(new FileReader("DataSource" + File.separator + "SkiBiathlonResults"));
 
-            //Create List for holding Employee objects
             List<BiathlonAthlete> biathlonAthleteList = new ArrayList<>();
 
             String line;
@@ -71,7 +70,6 @@ public class SkiBiathlonTest {
                 String[] athleteDetails = line.split(COMMA_DELIMITER);
 
                 if (athleteDetails.length > 0) {
-                    //Save the employee details in Employee object
                     BiathlonAthlete athlete = new BiathlonAthlete(Integer.parseInt(athleteDetails[0]),
                             athleteDetails[1], athleteDetails[2], athleteDetails[3], athleteDetails[4], athleteDetails[5],
                             athleteDetails[6]);
@@ -79,7 +77,6 @@ public class SkiBiathlonTest {
                 }
             }
 
-            //Lets print the Employee List
             for (BiathlonAthlete e : biathlonAthleteList) {
                 System.out.println(e.getAthleteNumber() + "   " + e.getAthleteName() + "   "
                         + e.getCountryCode() + "   " + e.getSkiTimeResult() + "   "
@@ -186,7 +183,7 @@ public class SkiBiathlonTest {
         athletes.add(new BiathlonAthlete(5, "Gabriela Szabo", "HU",
                 "29:30", "xxxxx", "xxxxx", "xxoxx"));
         athletes.add(new BiathlonAthlete(7, "Alfonso de Temesvar", "HU",
-                "28:00", "xxxxx", "xoxxx", "xxoxx"));
+                "28:00", "ooooo", "ooooo", "xxoxx"));
 
         try (PrintStream out = new PrintStream(new File("DataSource" + File.separator + "SkiBiathlonResults"))) {
             System.setOut(out);
@@ -211,6 +208,30 @@ public class SkiBiathlonTest {
         for (BiathlonAthlete set1 : athletes) {
             System.out.println(set1);
         }
+    }
+
+    @Test
+    public void limit_list_n_elements () {
+
+        List<String> athletsList = new ArrayList<>(8);
+        athletsList.add("11");
+        athletsList.add("Sebi");
+        athletsList.add("RO");
+        athletsList.add("31:40");
+        athletsList.add("xxxox");
+        athletsList.add("oooxx");
+        athletsList.add("xxxxx");
+
+
+        List<String> athletsWinners = athletsList.subList(0,3);
+
+        assertEquals(3, athletsWinners.size());
+
+        for (String athletsWinersTest: athletsWinners) {
+            System.out.println(athletsWinersTest);
+
+        }
+
     }
 
 

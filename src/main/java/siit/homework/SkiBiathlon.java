@@ -8,9 +8,11 @@ import static java.util.Collections.addAll;
 public class SkiBiathlon {
 
     protected static List<BiathlonAthlete> biathlonAthleteList;
-    protected static Set<BiathlonAthlete> allAthletes;
+    private static int iterator = 0;
 
     public static void main(String[] args) {
+
+        //call this static function, BiathlonAthlete.addAthleteInput(), if you want to add entries into SkiBiathlonResults file
 
         BufferedReader br = null;
         try {
@@ -32,30 +34,45 @@ public class SkiBiathlon {
             }
             Set<BiathlonAthlete> biathlonAthleteSet = new TreeSet<>(new SkiTimeResultComparator());
             biathlonAthleteSet.addAll(biathlonAthleteList);
+            // create a new list with the biathlonAthleteSet order
+            List<BiathlonAthlete> biathlonAthleteListFrozenOrder = new ArrayList<>(biathlonAthleteSet);
+            // create a new list with the first 3 elements (Winner, Runner-up and Third Place)
+            List<BiathlonAthlete> biathlonAthleteList2 = biathlonAthleteListFrozenOrder.subList(0, 3);
+
+
             try (PrintStream out = new PrintStream(new File("DataSource" + File.separator + "SkiBiathlonStandings"))) {
                 System.setOut(out);
-                for (BiathlonAthlete athletes : biathlonAthleteSet) {
-                    System.out.println(athletes.getAthleteName() + " " + athletes.reconvertedTime() + " " +"("+ athletes.getSkiTimeResult()
-                            + " + "+ athletes.penalties + ")");
+                for (BiathlonAthlete athletes : biathlonAthleteList2) {
+                    iterator++;
+                    if (iterator == 1) {
+                        System.out.println("Winner - " + athletes.getAthleteName() + " " + athletes.reconvertedTime() + " " + "(" + athletes.getSkiTimeResult()
+                                + " + " + athletes.penalties + ")");
+                    } else if (iterator == 2){
+                        System.out.println("Runner-up - " + athletes.getAthleteName() + " " + athletes.reconvertedTime() + " " + "(" + athletes.getSkiTimeResult()
+                                + " + " + athletes.penalties + ")");
+                    } else if (iterator == 3){
+                        System.out.println("Third place - " + athletes.getAthleteName() + " " + athletes.reconvertedTime() + " " + "(" + athletes.getSkiTimeResult()
+                                + " + " + athletes.penalties + ")");
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-    } catch(
-    Exception ee)
+        } catch (
+                Exception ee)
 
-    {
-        ee.printStackTrace();
-    } finally
+        {
+            ee.printStackTrace();
+        } finally
 
-    {
-        try {
-            br.close();
-        } catch (IOException ie) {
-            System.out.println("Error occurred while closing the BufferedReader");
-            ie.printStackTrace();
+        {
+            try {
+                br.close();
+            } catch (IOException ie) {
+                System.out.println("Error occurred while closing the BufferedReader");
+                ie.printStackTrace();
+            }
         }
     }
-}
 }
